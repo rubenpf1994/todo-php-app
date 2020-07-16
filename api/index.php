@@ -1,3 +1,7 @@
 <?php
-	echo "Hello wolrd";
+	include 'connexion.php';
+
+	$connection = new Connexion();
+
+
 ?>
