@@ -19,5 +19,10 @@ class Connexion
         }
         
     }
+
+    public function getConn(){
+        return $this->conn;
+    }
+
 }
 ?>

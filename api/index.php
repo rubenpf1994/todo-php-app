@@ -1,7 +1,9 @@
 <?php
-	include 'connexion.php';
+	include '../api/crud/TodoCrud.php';
 
-	$connection = new Connexion();
+	echo date("d-m-Y");
 
+	$todo = new TodoCrud();
 
+	var_dump($todo->get());
 ?>
