@@ -8,7 +8,7 @@ class Audit{
     private $fecha;
 
     public function __construct(){
-        $this->fecha = date("d-m-Y");
+        $this->fecha = date("Y-m-d H:i:s");
     }
 
     public function getId(){

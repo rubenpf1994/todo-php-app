@@ -1,6 +1,6 @@
 <?php 
 
-class Connexion
+class Conexion
 {
     private $host = 'localhost';
     private $user = 'root';

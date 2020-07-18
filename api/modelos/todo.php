@@ -9,7 +9,7 @@ class Todo{
 
     public function __construct(){
         $this->completada = false;
-        $this->fecha_creacion = date("d-m-Y");
+        $this->fecha_creacion = date("Y-m-d H:i:s");
     }
 
     public function getId(){
