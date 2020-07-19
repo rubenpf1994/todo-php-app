@@ -1,10 +1,31 @@
+/*$(document).ready(function() {
+    $("#idForm").submit(function(e) {
+
+        event.preventDefault(); //prevent default action 
+        var post_url = $(this).attr("action"); //get form action url
+        var request_method = $(this).attr("method"); //get form GET/POST method
+        var form_data = $(this).serialize(); //Encode form elements for submission
+        console.log('Ajax');
+        $.ajax({
+            url: post_url,
+            type: request_method,
+            data: form_data
+        }).done(function(response) { //
+            console.log(post_url);
+            console.log(request_method);
+            console.log(form_data);
+        });
+
+
+    });
+});
+*/
 var request = new XMLHttpRequest()
 
 request.open('GET', 'http://todo-app.test/', true)
 request.onload = function() {
     // Begin accessing JSON data here
     let data = $.parseJSON(this.response);
-    console.log(data);
     if (request.status >= 200 && request.status < 400) {
         const app = document.getElementById('root');
         data.forEach((card) => {
