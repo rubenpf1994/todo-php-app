@@ -15,7 +15,6 @@ class Conexion
                     . mysqli_connect_error());
         }else{
             $this->conn = $connection;
-            echo 'Connection stablished';
         }
         
     }

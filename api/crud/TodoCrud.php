@@ -1,4 +1,7 @@
 <?php
+// required headers
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json; charset=UTF-8");
 require_once('conexion.php');
 
 include 'modelos/audit.php';
@@ -13,12 +16,15 @@ class TodoCrud{
     //Lista las tareas pendientes de hacer
     public function get_todo(){
         $totalResults=[];
-        $result = $this->con->query('SELECT * FROM todo');
+        $result = $this->con->query('SELECT * FROM todo WHERE completada = 0');
 
         while($row = $result->fetch_assoc()){
-            $totalResults[]=json_encode($row);
+            $totalResults[]=$row;
         }
 
+        // set response code - 200 OK
+        http_response_code(200);
+  
         return $totalResults;
     }
 
