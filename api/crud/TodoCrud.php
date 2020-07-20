@@ -16,7 +16,7 @@ class TodoCrud{
     //Lista las tareas pendientes de hacer
     public function get_todo(){
         $totalResults=[];
-        $result = $this->con->query('SELECT * FROM todo WHERE completada = 0');
+        $result = $this->con->query('SELECT * FROM todo ORDER BY fecha_creacion ASC');
 
         while($row = $result->fetch_assoc()){
             $totalResults[]=$row;
@@ -30,11 +30,12 @@ class TodoCrud{
 
     //Para crear una nueva tarea
     public function post_todo($tarea){
-        $insert = $this->con->prepare('INSERT INTO todo (titulo, completada,fecha_creacion) 
-                                VALUES (?, ?, ?)');
-        $insert->bind_param('sis', $titulo, $completada, $fecha);
+        $insert = $this->con->prepare('INSERT INTO todo (titulo, completada,fecha_creacion, fecha_completada) 
+                                VALUES (?, ?, ?, ?)');
+        $insert->bind_param('siss', $titulo, $completada, $fecha, $fecha_completada);
         $titulo = $tarea->getTitulo();
-        $completada = (int)$tarea->getCompletada();
+        $completada = $tarea->getCompletada();
+        $fecha_completada = $tarea->getFechaCompletada();
         $fecha = $tarea->getFechaCreacion();
 
         //Si se ha insertado correctamente, añadimos el report correspondiente
@@ -49,7 +50,6 @@ class TodoCrud{
             if(!$insertReport->bind_param('isss', $idTarea,$accion, $descripcion, $fecha)){
                 echo 'Insercion de Report sale mal';
             };
-
             $idTarea = $audit->getIdTarea();
             $accion = $audit->getAccion(); 
             $descripcion =  $audit->getDescripcion();
@@ -108,7 +108,8 @@ class TodoCrud{
 
         //Si se ha modificado correctamente, añadimos el report correspondiente
         if($modify->execute()){
-            $currentId = mysqli_insert_id($this->con);
+            echo 'modficado correctamente';
+            $currentId = $tarea->getId();
             $audit = new Audit();
             $audit->setIdTarea($currentId);
             $audit->setAccion('put');
@@ -123,8 +124,9 @@ class TodoCrud{
             $accion = $audit->getAccion(); 
             $descripcion =  $audit->getDescripcion();
             $fecha=$audit->getFecha();
-            
-            $insertReport->execute();
+            if(!$insertReport->execute()){
+                echo 'Sale mal';
+            }
 
 
         }
@@ -132,8 +134,12 @@ class TodoCrud{
 
     public function get_todo_by_id($id){
         $result = $this->con->query('SELECT * FROM todo where id = '.$id);
-
-        return json_encode($result->fetch_assoc());
+        var_dump('SELECT * FROM todo where id = '.$id);
+        if($row = $result->fetch_assoc()){
+            $currentTodo = $row;
+            return $currentTodo;
+        }
+        
     }
 }
 ?>

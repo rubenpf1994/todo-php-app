@@ -21,11 +21,28 @@
           </button>
 
         </div>
+        <form action="http://todo-app.test/" method="POST">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <h5>To Do</h5>
+                        <div id="todo">
 
-        <div id="root">
-            <div class="row">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <h5>Done</h5>
+                        <div id="done">
+
+                        </div>
+                    </div>
+
+                </div>
             </div>
-        </div>
+
+
+        </form>
+
     </div>
 
 
@@ -42,14 +59,14 @@
                 <div class="modal-body">
                     <form id="idForm" action="http://todo-app.test/" method="POST">
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Nombre de la tarea</label>
-                            <input type="text" name="tarea" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                            <label for="nombre">Nombre de la tarea</label>
+                            <input type="text" name="task" class="form-control" aria-describedby="emailHelp">
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputPassword1">Fecha final</label>
-                            <input type="date" name="date" class="form-control" id="exampleInputPassword1">
+                            <label for="fecha">Fecha final</label>
+                            <input type="date" name="date" class="form-control">
                         </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" name="newTask" class="btn btn-primary">Submit</button>
                     </form>
                 </div>
             </div>

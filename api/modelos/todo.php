@@ -12,6 +12,10 @@ class Todo{
         $this->fecha_creacion = date("Y-m-d H:i:s");
     }
 
+    public function setId($id){
+		$this->id = $id;
+	}
+
     public function getId(){
 		return $this->id;
 	}
@@ -46,7 +50,8 @@ class Todo{
 	}
  
     public function setFechaCompletada($fCompletada){
-        $this->fecha_completada = $fCompletada;
+        $this->fecha_completada = date("Y-m-d H:i:s", strtotime($fCompletada));
+        echo $this->fecha_completada;
     }
 }
 

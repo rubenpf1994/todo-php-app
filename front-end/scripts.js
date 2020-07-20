@@ -27,7 +27,9 @@ request.onload = function() {
     // Begin accessing JSON data here
     let data = $.parseJSON(this.response);
     if (request.status >= 200 && request.status < 400) {
-        const app = document.getElementById('root');
+        const todo = document.getElementById('todo');
+        const done = document.getElementById('done');
+        console.log(data);
         data.forEach((card) => {
 
             let containerTask = document.createElement('div');
@@ -36,6 +38,19 @@ request.onload = function() {
             let titleTask = document.createElement('h5');
             titleTask.setAttribute('class', 'card-title');
             titleTask.innerText = card.titulo;
+            let checkButton = document.createElement('button');
+            checkButton.innerText = "Completado";
+            checkButton.setAttribute('class', 'btn btn-info');
+            checkButton.setAttribute('name', 'idCard');
+            checkButton.setAttribute('type', 'submit');
+            checkButton.setAttribute('value', card.id);
+
+            let buttonDelete = document.createElement('button');
+            buttonDelete.innerText = "Eliminar";
+            buttonDelete.setAttribute('class', 'btn btn-danger');
+            buttonDelete.setAttribute('name', 'idDelete');
+            buttonDelete.setAttribute('type', 'submit');
+            buttonDelete.setAttribute('value', card.id);
 
             let fechaLimite = document.createElement('p');
             fechaLimite.setAttribute('class', 'card-text');
@@ -45,12 +60,22 @@ request.onload = function() {
 
             containerTask.appendChild(titleTask);
             containerTask.appendChild(fechaLimite);
+            containerTask.appendChild(buttonDelete);
+            if (card.completada === "0") {
+                containerTask.appendChild(checkButton);
+            }
+
             todoTask.setAttribute('class', 'card');
             todoTask.style.width = '18rem';
 
             todoTask.appendChild(containerTask);
 
-            app.append(todoTask);
+            if (card.completada === "1") {
+                done.append(todoTask);
+            } else {
+                todo.append(todoTask);
+            }
+
         })
     } else {
         console.log('error')
