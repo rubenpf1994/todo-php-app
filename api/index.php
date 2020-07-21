@@ -1,15 +1,16 @@
 <?php
 	include '../api/crud/TodoCrud.php';
 	include '../api/modelos/todo.php';
+	include '../api/crud/AuditCrud.php';
 
 	$todoCrud = new TodoCrud();
-	
-	if(isset($_POST['idCard'])||isset($_POST['idDelete'])){
+	$auditCrud = new AuditCrud();
+	if(isset($_POST['idCompleted'])||isset($_POST['idDelete'])){
 		
-		if(isset($_POST['idCard'])){
-			$tarea = $todoCrud->get_todo_by_id($_POST['idCard']);
+		if(isset($_POST['idCompleted'])){
+			$tarea = $todoCrud->get_todo_by_id($_POST['idCompleted']);
 			$todo = new Todo();
-			$todo->setId((int)$tarea["id"]);
+			$todo->setId($tarea["id"]);
 			$todo->setTitulo($tarea["titulo"]);
 			$todo->setCompletada(true);
 			$todo->setFechaCreacion($tarea["fecha_creacion"]);
@@ -24,16 +25,22 @@
 
 	if(isset($_POST["newTask"])){
 		if (isset($_POST["task"]) && isset($_POST["date"])){
-			echo $_POST["date"];
 			$todo = new Todo();
 			$todo->setTitulo($_POST["task"]);
 			$todo->setFechaCompletada($_POST["date"]);
 			$todoCrud->post_todo($todo);
 		}
-		echo "Formulario recibido";
 	}
 
-	echo json_encode($todoCrud->get_todo());
+	if(isset($_GET["type"])){
+		if($_GET["type"]==="todoTasks"){
+			echo json_encode($todoCrud->get_todo());
+		}
+		if($_GET["type"]==="auditTasks"){
+			echo json_encode($auditCrud->get_report(null));
+		}
+	}
+	
 
 	
 ?>

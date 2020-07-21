@@ -15,39 +15,48 @@
 
 <body>
     <div class="container">
-        <div class="container card">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-            Añadir tarea
-          </button>
-
+        <div class="row">
+            <div class="col">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newModal">
+                Añadir tarea
+              </button>
+            </div>
+            <div class="col">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#showAudit">
+                Ver historico
+              </button>
+            </div>
         </div>
+
+    </div>
+    <div class="container">
         <form action="http://todo-app.test/" method="POST">
-            <div class="container">
-                <div class="row">
-                    <div class="col">
-                        <h5>To Do</h5>
-                        <div id="todo">
 
-                        </div>
+            <div class="row">
+                <div class="col">
+                    <h5>To Do</h5>
+                    <div id="todo">
+
                     </div>
-                    <div class="col">
-                        <h5>Done</h5>
-                        <div id="done">
-
-                        </div>
-                    </div>
-
                 </div>
+                <div class="col">
+                    <h5>Done</h5>
+                    <div id="done">
+
+                    </div>
+                </div>
+
             </div>
 
 
-        </form>
 
+        </form>
     </div>
 
 
+
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="newModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -67,6 +76,38 @@
                             <input type="date" name="date" class="form-control">
                         </div>
                         <button type="submit" name="newTask" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal audits-->
+    <div class="modal fade" id="showAudit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Histórico de movimientos</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+                </div>
+                <div class="modal-body">
+                    <form id="idForm" action="http://todo-app.test/" method="POST">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Tarea</th>
+                                    <th scope="col">Accion</th>
+                                    <th scope="col">Descripcion</th>
+                                    <th scope="col">Estado</th>
+                                    <th scope="col">#</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bodyTable">
+
+                            </tbody>
+                        </table>
                     </form>
                 </div>
             </div>

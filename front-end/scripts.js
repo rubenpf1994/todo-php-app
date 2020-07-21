@@ -20,13 +20,14 @@
     });
 });
 */
-var request = new XMLHttpRequest()
+let requestTask = new XMLHttpRequest()
+let requestAudit = new XMLHttpRequest()
 
-request.open('GET', 'http://todo-app.test/', true)
-request.onload = function() {
+requestTask.open('GET', 'http://todo-app.test/?type=todoTasks', true)
+requestTask.onload = function() {
     // Begin accessing JSON data here
     let data = $.parseJSON(this.response);
-    if (request.status >= 200 && request.status < 400) {
+    if (requestTask.status >= 200 && requestTask.status < 400) {
         const todo = document.getElementById('todo');
         const done = document.getElementById('done');
         console.log(data);
@@ -41,7 +42,7 @@ request.onload = function() {
             let checkButton = document.createElement('button');
             checkButton.innerText = "Completado";
             checkButton.setAttribute('class', 'btn btn-info');
-            checkButton.setAttribute('name', 'idCard');
+            checkButton.setAttribute('name', 'idCompleted');
             checkButton.setAttribute('type', 'submit');
             checkButton.setAttribute('value', card.id);
 
@@ -82,4 +83,35 @@ request.onload = function() {
     }
 }
 
-request.send()
+requestAudit.open('GET', 'http://todo-app.test/?type=auditTasks', true)
+requestAudit.onload = function() {
+    // Begin accessing JSON data here
+    let data = $.parseJSON(this.response);
+    if (requestAudit.status >= 200 && requestAudit.status < 400) {
+        let tableContent = document.getElementById("bodyTable");
+        data.forEach((audit) => {
+            console.log(audit.titulo);
+            let tableRow = document.createElement('tr');
+            let tdTarea = document.createElement('td');
+            tdTarea.innerText = audit.titulo;
+            let tdAccion = document.createElement('td');
+            tdAccion.innerText = audit.accion;
+            let tdDescripcion = document.createElement('td');
+            tdDescripcion.innerText = audit.descripcion;
+            let tdEstado = document.createElement('td');
+            tdEstado.innerText = (audit.completada === "1") ? "Completda" : "Pendiente";
+            let buttonView = document.createElement("button");
+            buttonView.innerHTML = "Ver";
+
+            tableRow.appendChild(tdTarea);
+            tableRow.appendChild(tdAccion);
+            tableRow.appendChild(tdDescripcion);
+            tableRow.appendChild(tdEstado);
+            tableRow.appendChild(buttonView);
+            tableContent.append(tableRow);
+        })
+    }
+}
+
+requestTask.send()
+requestAudit.send()

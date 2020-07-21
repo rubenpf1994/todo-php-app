@@ -25,3 +25,6 @@ ADD CONSTRAINT `fk_audit_todo`
   REFERENCES `todobd`.`todo` (`id`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
+
+ALTER TABLE `todobd`.`todo` 
+ADD COLUMN `eliminado` TINYINT NULL DEFAULT 0 AFTER `fecha_completada`;

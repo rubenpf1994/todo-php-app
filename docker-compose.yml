@@ -1,0 +1,30 @@
+version: '3'
+services:
+  php-apache:
+    container_name: php-apache
+    image: php-apache
+    ports:
+      - "8080:80"
+    build: 
+      context: .
+      dockerfile: ./api/Dockerfile
+  nginx:
+    container_name: nginx
+    image: docker-nginx
+    ports:
+     - "100:100"
+    build: 
+      context: .
+      dockerfile: ./front-end/Dockerfile
+  db:
+    container_name: mysql
+    image: mysql:8.0.21
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: todobd
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    ports:
+      - "3306:3306"
+      
+    

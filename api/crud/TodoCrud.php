@@ -16,7 +16,7 @@ class TodoCrud{
     //Lista las tareas pendientes de hacer
     public function get_todo(){
         $totalResults=[];
-        $result = $this->con->query('SELECT * FROM todo ORDER BY fecha_creacion ASC');
+        $result = $this->con->query('SELECT * FROM todo WHERE eliminado = 0 ORDER BY fecha_creacion ASC');
 
         while($row = $result->fetch_assoc()){
             $totalResults[]=$row;
@@ -44,7 +44,7 @@ class TodoCrud{
             $audit = new Audit();
             $audit->setIdTarea($currentId);
             $audit->setAccion('post');
-            $audit->setDescripcion("Creada la tarea ".$currentId." a las ".$audit->getFecha());
+            $audit->setDescripcion("Creada la tarea '".$titulo."' a las ".$audit->getFecha());
             $insertReport = $this->con->prepare('INSERT INTO audit (idTarea, accion, descripcion, fecha) VALUES (?,?,?,?)');
             
             if(!$insertReport->bind_param('isss', $idTarea,$accion, $descripcion, $fecha)){
@@ -63,16 +63,18 @@ class TodoCrud{
 
     //Para eliminar una tarea
     public function delete_todo($id){
-        $delete = $this->con->prepare('DELETE FROM todo WHERE id = ?');
+        //Mantendremos la tarea en base de datos para no perder la relación entre esta y la tabla 'audit'
+        //Una aliminación equivaldrá a 'ocultar' 
+        $delete = $this->con->prepare('UPDATE todo SET eliminado = 1 WHERE id = ?');
         $delete ->bind_param('i', $id);
         
         //Si se elimina correctamente, insertamos nuevo report
         if($delete->execute()){
             $currentId = mysqli_insert_id($this->con);
             $audit = new Audit();
-            $audit->setIdTarea($currentId);
+            $audit->setIdTarea($id);
             $audit->setAccion('delete');
-            $audit->setDescripcion("Eliminada la tarea ".$currentId." a las ".$audit->getFecha());
+            $audit->setDescripcion("Eliminada la tarea '".$currentId."' a las ".$audit->getFecha());
             $insertReport = $this->con->prepare('INSERT INTO audit (idTarea, accion, descripcion, fecha) VALUES (?,?,?,?)');
             
             if(!$insertReport->bind_param('isss', $idTarea,$accion, $descripcion, $fecha)){
@@ -104,16 +106,13 @@ class TodoCrud{
         $fecha_creacion = $tarea->getFechaCreacion();
         $fecha_completada = $tarea->getFechaCompletada(); 
         $id = $tarea->getId();      
-        
 
         //Si se ha modificado correctamente, añadimos el report correspondiente
         if($modify->execute()){
-            echo 'modficado correctamente';
-            $currentId = $tarea->getId();
             $audit = new Audit();
-            $audit->setIdTarea($currentId);
+            $audit->setIdTarea((int)$id);
             $audit->setAccion('put');
-            $audit->setDescripcion("Actualizada la tarea ".$currentId." a las ".$audit->getFecha());
+            $audit->setDescripcion("Actualizada la tarea '".$titulo."' a las ".$audit->getFecha());
             $insertReport = $this->con->prepare('INSERT INTO audit (idTarea, accion, descripcion, fecha) VALUES (?,?,?,?)');
             
             if(!$insertReport->bind_param('isss', $idTarea,$accion, $descripcion, $fecha)){
@@ -125,7 +124,7 @@ class TodoCrud{
             $descripcion =  $audit->getDescripcion();
             $fecha=$audit->getFecha();
             if(!$insertReport->execute()){
-                echo 'Sale mal';
+                http_response_code(500);
             }
 
 
@@ -134,7 +133,6 @@ class TodoCrud{
 
     public function get_todo_by_id($id){
         $result = $this->con->query('SELECT * FROM todo where id = '.$id);
-        var_dump('SELECT * FROM todo where id = '.$id);
         if($row = $result->fetch_assoc()){
             $currentTodo = $row;
             return $currentTodo;

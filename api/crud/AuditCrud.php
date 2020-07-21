@@ -14,17 +14,18 @@ class AuditCrud{
     public function get_report($param){
         $totalResults=[];
         if($param!=='all'){
-            $query='SELECT * FROM audit join todo';
+            $query='SELECT * FROM audit join todo WHERE audit.idTarea = todo.id ORDER BY fecha ASC';
         }else{
             //Si la variable $param recibe el nombre del campo por el que filtrar
-            $query='SELECT * FROM audit join todo WHERE accion LIKE '.$param;
+            $query='SELECT * FROM audit join todo WHERE audit.idTarea = todo.id AND WHERE accion LIKE '.$param.' ORDER BY fecha ASC';
         }
         $result = $this->con->query($query);
 
         while($row = $result->fetch_assoc()){
-            $totalResults[]=json_encode($row);
+            $totalResults[]=$row;
         }
-
+        // set response code - 200 OK
+        http_response_code(200);
         return $totalResults;
     }   
 
@@ -35,6 +36,8 @@ class AuditCrud{
         while($row = $result->fetch_assoc()){
             $totalResults[]=json_encode($row);
         }
+        // set response code - 200 OK
+        http_response_code(200);
         return $totalResults;
     }
 }
